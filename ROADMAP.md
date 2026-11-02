@@ -5,7 +5,7 @@ This project has two tracks:
 1. **Track A — core replica:** reproduce the essential offline, single-GPU execution path of the reference nano-vLLM project for **Qwen3**.
 2. **Track B — hardening:** add the tests, API surface, observability, and optional optimizations that make the implementation easier to evolve.
 
-Track A is the immediate goal. It should be small, focused, and functional before the project expands. Each milestone is one Git commit. Before committing, run its listed test command and then `python -m pytest -q`.
+Track A is the immediate goal. It should be small, focused, and functional before the project expands. Each milestone is one Git commit. Before committing, run its listed test command and then `uv run pytest -q`.
 
 ## Track A — Qwen3 core replica
 
@@ -18,13 +18,13 @@ Track A is the immediate goal. It should be small, focused, and functional befor
 - `src/nano_vllm/__init__.py` and a minimal `src/nano_vllm/cli.py`;
 - `.gitignore` for virtual environments, Python caches, IDE files, coverage, and local model directories;
 - `tests/test_package.py` and `tests/conftest.py`;
-- keep Qwen loading dependencies optional: `pip install -e '.[dev,model]'` is only needed from M3 onward.
+- keep Qwen loading dependencies optional: `uv sync --extra dev --extra model` is only needed from M3 onward.
 
 **Acceptance**
 
 ```bash
-python -m pip install -e '.[dev]'
-python -m pytest -q
+uv sync --extra dev
+uv run pytest -q
 ```
 
 **Commit:** `chore: bootstrap nano-vllm project`

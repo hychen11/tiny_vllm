@@ -43,18 +43,20 @@ It intentionally defers distributed execution, quantization, LoRA, multimodal mo
 
 ## Installation
 
-M0 only needs the development tools:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) once. From the repository root, create the project environment and install the development tools:
 
 ```bash
-python -m pip install -e '.[dev]'
-python -m pytest -q
+uv sync --extra dev
+uv run pytest -q
 ```
+
+`uv sync` creates `.venv` and installs the project in editable mode. `uv run` uses that environment even if your shell still shows Conda `(base)`, avoiding unrelated global pytest plugins.
 
 Install the Qwen loading dependencies at M3. The web dependencies are only needed at M9:
 
 ```bash
-python -m pip install -e '.[dev,model]'
-python -m pip install -e '.[dev,model,api]'
+uv sync --extra dev --extra model
+uv sync --extra dev --extra model --extra api
 ```
 
 `pyproject.toml` deliberately keeps `transformers`, FastAPI, and Uvicorn optional. The scheduler/cache unit tests must remain fast and independent of network access, model downloads, and CUDA.
@@ -147,9 +149,9 @@ For every milestone:
 4. Make one Git commit only after all tests pass.
 
 ```bash
-python -m pytest tests/unit -q
-python -m pytest tests/integration -q
-python -m pytest -q
+uv run pytest tests/unit -q
+uv run pytest tests/integration -q
+uv run pytest -q
 ```
 
 Use a seeded `torch.Generator` whenever a test samples randomly. Unit tests must never need CUDA, an internet connection, or downloaded weights. Real Qwen parity tests have both `integration` and `model` markers; CUDA-only tests additionally have `cuda`.
