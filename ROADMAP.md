@@ -46,10 +46,10 @@ tests/unit/test_sequence.py
 
 - `SamplingParams(temperature, max_tokens, ignore_eos)`; keep top-k/top-p and stop strings for Track B;
 - `SequenceStatus`: `WAITING`, `RUNNING`, `FINISHED`;
-- `Sequence`: prompt token ids, generated token ids, `num_cached_tokens`, `num_scheduled_tokens`, `block_table`, and finish state;
-- append a token and finish on EOS or `max_tokens`.
+- `Sequence`: prompt token ids, current total/last token, `num_cached_tokens`, `num_scheduled_tokens`, `block_table`, and status;
+- append a token while preserving the original prompt length. The engine handles EOS and `max_tokens` completion in M5.
 
-**Tests:** parameter validation; token counting; prompt/completion split; block count boundaries; EOS and length completion.
+**Tests:** parameter validation; unique sequence ids; independent prompt copies and block tables; initial scheduler/cache state; token and last-token accounting after appends. Completion slicing and block helpers are added when their consumers are implemented in M2; EOS and length completion are tested with the engine in M5.
 
 **Commit:** `feat: add minimal sequence state and sampling params`
 
